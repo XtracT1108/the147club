@@ -1,0 +1,38 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+  
+    // Helper function to check if the requesting user is the Superuser
+    function isSuperuser() {
+      // Assuming 'role' is a field on the user document matching the authenticated email
+      return get(/databases/$(database)/documents/users/$(request.auth.token.email)).data.role == 'SUPERUSER';
+    }
+
+    // 1. Table States
+    match /tables/state {
+      // Anyone (even unauthenticated customers) can READ the live table status to see the dashboard
+      allow read: if true;
+      // Only authenticated Admins (or the Superuser) can change a table's status
+      allow write: if request.auth != null; 
+    }
+    
+    // 2. Audit Logs
+    match /audit_logs/{logId} {
+      // Logs can ONLY be created by authenticated admins (triggered via app.js)
+      allow create: if request.auth != null;
+      // Logs can ONLY be read by the club owner (Superuser)
+      allow read: if isSuperuser();
+      // Nobody can ever edit or delete a log once it is written
+      allow update, delete: if false;
+    }
+    
+    // 3. User Role Management
+    match /users/{userId} {
+      // Users can read their own role document to authenticate, OR the Superuser can read all of them
+      allow read: if request.auth.token.email == userId || isSuperuser();
+      // Only the Superuser can create or modify roles (to assign new admins)
+      allow write: if isSuperuser();
+    }
+  }
+}
