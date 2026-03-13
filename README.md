@@ -1,73 +1,69 @@
-# React + TypeScript + Vite
+# the147club Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Live Status](https://img.shields.io/badge/Status-Live-success) 
+![React](https://img.shields.io/badge/React-19.0-blue)
+![Vite](https://img.shields.io/badge/Vite-6.0-purple)
+![Tailwind](https://img.shields.io/badge/Tailwind-4.0-38B2AC)
+![Firebase](https://img.shields.io/badge/Firebase-11.4-FFA611)
 
-Currently, two official plugins are available:
+A modern, real-time dashboard for **The 147 Club**, built to track snooker table occupancy and global club status. 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Recently migrated from a vanilla HTML/CSS architecture to a robust **React Single Page Application (SPA)** with premium UI components.
 
-## React Compiler
+🔗 **Live Site:** [https://the147club-hq.web.app](https://the147club-hq.web.app) (Soon via custom domain `the147club.xtract.website`)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## ✨ Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Real-Time Synchronization:** Uses Firebase Firestore `onSnapshot` to instantly push table updates to all connected clients without refreshing.
+- **Customer Dashboard (Public):** Beautiful, read-only view of the club's current status and individual table availability, featuring stunning Magic UI effects like `BorderBeam`, `Ripple`, and `AnimatedShinyText`.
+- **Admin Control Panel (Protected):** Secure login for staff to toggle table statuses (FREE, BUSY, RESERVED) and open/close the club.
+- **Superuser Master Console (Protected):** Exclusive access to create new admin accounts and view an immutable audit trail of all staff actions.
+- **Location integration:** Embedded Google Maps directly to the club's location.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🛠 Tech Stack
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **Frontend:** React 19, TypeScript, Vite
+- **Styling:** Tailwind CSS v4
+- **UI Libraries:** 
+  - [shadcn/ui](https://ui.shadcn.com/) (Card, Badge, Button, Input, Separator)
+  - [Magic UI](https://magicui.design/) (Animations, Gradients, Dot Patterns)
+- **Backend & Database:** Firebase (Authentication, Firestore Realtime Database)
+- **Deployment:** Firebase Hosting
+- **Routing:** React Router DOM
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 🔐 Security & Architecture
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- **Role-Based Access Control (RBAC):** Users are assigned either `ADMIN` or `SUPERUSER` roles via Firestore.
+- **Guarded Routes:** The UI actively hides controls depending on the authenticated user's role.
+- **Firestore Security Rules:** 
+  - `state` document: Anyone can read, only authenticated users can write.
+  - `users` collection: Superusers only.
+  - `audit_logs` collection: Authenticated users can write, only Superusers can read.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🚀 Local Development
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/XtracT1108/the147club.git
+   cd the147club
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
+
+4. **Build for production:**
+   ```bash
+   npm run build
+   ```
+
+## 👨‍💻 Developed By
+[XtracT](https://www.instagram.com/xtract._/)
